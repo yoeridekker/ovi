@@ -1,0 +1,418 @@
+{
+    "aantal_cilinders": {
+        "label": "",
+        "format": ""
+    },
+    "aantal_deuren": {
+        "label": "",
+        "format": ""
+    },
+    "aantal_rolstoelplaatsen": {
+        "label": "",
+        "format": ""
+    },
+    "aantal_wielen": {
+        "label": "",
+        "format": ""
+    },
+    "aantal_zitplaatsen": {
+        "label": "",
+        "format": ""
+    },
+    "afstand_hart_koppeling_tot_achterzijde_voertuig": {
+        "label": "",
+        "format": ""
+    },
+    "afstand_voorzijde_voertuig_tot_hart_koppeling": {
+        "label": "",
+        "format": ""
+    },
+    "breedte": {
+        "label": "",
+        "format": ""
+    },
+    "bruto_bpm": {
+        "label": "",
+        "format": ""
+    },
+    "cilinderinhoud": {
+        "label": "",
+        "format": ""
+    },
+    "datum_eerste_afgifte_nederland": {
+        "label": "Datum eerste afgifte in Nederland",
+        "format": "sanitizeDate"
+    },
+    "datum_eerste_toelating": {
+        "label": "",
+        "format": ""
+    },
+    "datum_tenaamstelling": {
+        "label": "",
+        "format": ""
+    },
+    "eerste_kleur": {
+        "label": "",
+        "format": ""
+    },
+    "europese_voertuigcategorie": {
+        "label": "",
+        "format": ""
+    },
+    "export_indicator": {
+        "label": "",
+        "format": ""
+    },
+    "handelsbenaming": {
+        "label": "",
+        "format": ""
+    },
+    "inrichting": {
+        "label": "",
+        "format": ""
+    },
+    "kenteken": {
+        "label": "Kenteken",
+        "format": "sanitizeString"
+    },
+    "lengte": {
+        "label": "",
+        "format": ""
+    },
+    "massa_ledig_voertuig": {
+        "label": "",
+        "format": ""
+    },
+    "massa_rijklaar": {
+        "label": "",
+        "format": ""
+    },
+    "maximum_massa_samenstelling": {
+        "label": "",
+        "format": ""
+    },
+    "maximum_massa_trekken_ongeremd": {
+        "label": "",
+        "format": ""
+    },
+    "maximum_trekken_massa_geremd": {
+        "label": "",
+        "format": ""
+    },
+    "merk": {
+        "label": "Merk",
+        "format": ""
+    },
+    "openstaande_terugroepactie_indicator": {
+        "label": "",
+        "format": ""
+    },
+    "plaats_chassisnummer": {
+        "label": "",
+        "format": ""
+    },
+    "taxi_indicator": {
+        "label": "",
+        "format": ""
+    },
+    "technische_max_massa_voertuig": {
+        "label": "",
+        "format": ""
+    },
+    "toegestane_maximum_massa_voertuig": {
+        "label": "",
+        "format": ""
+    },
+    "tweede_kleur": {
+        "label": "",
+        "format": ""
+    },
+    "typegoedkeuringsnummer": {
+        "label": "",
+        "format": ""
+    },
+    "uitvoering": {
+        "label": "",
+        "format": ""
+    },
+    "variant": {
+        "label": "",
+        "format": ""
+    },
+    "vermogen_massarijklaar": {
+        "label": "",
+        "format": ""
+    },
+    "vervaldatum_apk": {
+        "label": "",
+        "format": ""
+    },
+    "voertuigsoort": {
+        "label": "",
+        "format": ""
+    },
+    "volgnummer_wijziging_eu_typegoedkeuring": {
+        "label": "",
+        "format": ""
+    },
+    "wacht_op_keuren": {
+        "label": "",
+        "format": ""
+    },
+    "wam_verzekerd": {
+        "label": "",
+        "format": ""
+    },
+    "wielbasis": {
+        "label": "",
+        "format": ""
+    },
+    "zuinigheidslabel": {
+        "label": "",
+        "format": ""
+    },
+    "assen": {
+        "label": "",
+        "format": ""
+    },
+    "aantal_assen": {
+        "label": "",
+        "format": ""
+    },
+    "as_nummer": {
+        "label": "",
+        "format": ""
+    },
+    "spoorbreedte": {
+        "label": "",
+        "format": ""
+    },
+    "technisch_toegestane_maximum_aslast": {
+        "label": "",
+        "format": ""
+    },
+    "wettelijk_toegestane_maximum_aslast": {
+        "label": "",
+        "format": ""
+    },
+    "brandstof": {
+        "label": "",
+        "format": ""
+    },
+    "brandstof_omschrijving": {
+        "label": "",
+        "format": ""
+    },
+    "brandstof_volgnummer": {
+        "label": "",
+        "format": ""
+    },
+    "brandstofverbruik_buiten": {
+        "label": "",
+        "format": ""
+    },
+    "brandstofverbruik_gecombineerd": {
+        "label": "",
+        "format": ""
+    },
+    "brandstofverbruik_stad": {
+        "label": "",
+        "format": ""
+    },
+    "co2_uitstoot_gecombineerd": {
+        "label": "",
+        "format": ""
+    },
+    "emissiecode_omschrijving": {
+        "label": "",
+        "format": ""
+    },
+    "geluidsniveau_rijdend": {
+        "label": "",
+        "format": ""
+    },
+    "geluidsniveau_stationair": {
+        "label": "",
+        "format": ""
+    },
+    "milieuklasse_eg_goedkeuring_licht": {
+        "label": "",
+        "format": ""
+    },
+    "nettomaximumvermogen": {
+        "label": "",
+        "format": ""
+    },
+    "toerental_geluidsniveau": {
+        "label": "",
+        "format": ""
+    },
+    "carrosserie": {
+        "label": "",
+        "format": ""
+    },
+    "carrosserie_volgnummer": {
+        "label": "",
+        "format": ""
+    },
+    "carrosserietype": {
+        "label": "",
+        "format": ""
+    },
+    "type_carrosserie_europese_omschrijving": {
+        "label": "",
+        "format": ""
+    },
+    "gebreken": {
+        "label": "",
+        "format": ""
+    },
+    "aantal_gebreken_geconstateerd": {
+        "label": "",
+        "format": ""
+    },
+    "gebrek_identificatie": {
+        "label": "",
+        "format": ""
+    },
+    "meld_datum_door_keuringsinstantie": {
+        "label": "",
+        "format": ""
+    },
+    "meld_tijd_door_keuringsinstantie": {
+        "label": "",
+        "format": ""
+    },
+    "soort_erkenning_keuringsinstantie": {
+        "label": "",
+        "format": ""
+    },
+    "soort_erkenning_omschrijving": {
+        "label": "",
+        "format": ""
+    },
+    "gebrek_details": {
+        "label": "",
+        "format": ""
+    },
+    "gebrek_artikel_nummer": {
+        "label": "",
+        "format": ""
+    },
+    "gebrek_omschrijving": {
+        "label": "",
+        "format": ""
+    },
+    "ingangsdatum_gebrek": {
+        "label": "",
+        "format": ""
+    },
+    "einddatum_gebrek": {
+        "label": "",
+        "format": ""
+    },
+    "gebrek_paragraaf_nummer": {
+        "label": "",
+        "format": ""
+    },
+    "catalogusprijs": {
+        "label": "",
+        "format": ""
+    },
+    "type": {
+        "label": "",
+        "format": ""
+    },
+    "uitstoot_deeltjes_licht": {
+        "label": "",
+        "format": ""
+    },
+    "retrofit_roetfilter": {
+        "label": "",
+        "format": ""
+    },
+    "laadvermogen": {
+        "label": "",
+        "format": ""
+    },
+    "aanhangwagen_autonoom_geremd": {
+        "label": "",
+        "format": ""
+    },
+    "aanhangwagen_middenas_geremd": {
+        "label": "",
+        "format": ""
+    },
+    "terugroep_acties": {
+        "label": "",
+        "format": ""
+    },
+    "referentiecode_rdw": {
+        "label": "",
+        "format": ""
+    },
+    "code_status": {
+        "label": "",
+        "format": ""
+    },
+    "status": {
+        "label": "",
+        "format": ""
+    },
+    "totaal_aantal_voertuigen_terugroepactie": {
+        "label": "",
+        "format": ""
+    },
+    "opmerkingen_rdw": {
+        "label": "",
+        "format": ""
+    },
+    "referentiecode_producent": {
+        "label": "",
+        "format": ""
+    },
+    "nationaal_opgegeven_aantal_voertuigen_terugroepactie": {
+        "label": "",
+        "format": ""
+    },
+    "categorie_defect": {
+        "label": "",
+        "format": ""
+    },
+    "meer_informatie_op_internet": {
+        "label": "",
+        "format": ""
+    },
+    "omschrijving_defect": {
+        "label": "",
+        "format": ""
+    },
+    "beschrijving_van_het_herstel": {
+        "label": "",
+        "format": ""
+    },
+    "meldende_producent_distributeur": {
+        "label": "",
+        "format": ""
+    },
+    "risicobeoordeling_rdw": {
+        "label": "",
+        "format": ""
+    },
+    "materi_le_gevolgen": {
+        "label": "",
+        "format": ""
+    },
+    "meer_informatie_via_telefoonnummer": {
+        "label": "",
+        "format": ""
+    },
+    "plaatscode_as": {
+        "label": "",
+        "format": ""
+    },
+    "nominaal_continu_maximumvermogen": {
+        "label": "",
+        "format": ""
+    }
+}

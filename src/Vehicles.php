@@ -39,5 +39,15 @@ class Vehicles implements VehiclesInterface
             ->formatData()
             ->getBody( true );
     }
+    
+    public function get_raw( array $params = [] )
+    {
+        return $this->instance->setQueryArgs( $params )
+            ->getRequestUrl()
+            ->doRequest()
+            ->enrichData()
+            ->mapFields()
+            ->getBody( true );
+    }
 
 }

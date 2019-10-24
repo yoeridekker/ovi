@@ -110,6 +110,18 @@ class LicensedVehicles implements ApiInterface
 
                     $recals = $this->getRecals( $value );
                     if( !empty( $recals ) ) $this->response[$index]['terugroep_acties'] = $recals;
+
+                }
+
+                if( $field === 'typegoedkeuringsnummer' && !empty( $value ) )
+                {
+                    $emissions = $this->getEmissions( $value );
+                    if( !empty( $emissions ) ) $this->response[$index]['uitstoot'] = $emissions;
+
+                    $engines = $this->getEngines( $value );
+                    if( !empty( $engines ) ) $this->response[$index]['motoren'] = $engines;
+
+                    
                 }
                 
             }
@@ -128,6 +140,18 @@ class LicensedVehicles implements ApiInterface
     {
         $recals = new Recals();
         return $recals->setQueryArg( 'kenteken', $licenseplate )->getRequestUrl()->doRequest()->enrichData()->getBody();
+    }
+
+    public function getEmissions( string $goedkeuringssleutel ) : array 
+    {
+        $recals = new Emissions();
+        return $recals->setQueryArg( 'eu_type_goedkeuringssleutel', $goedkeuringssleutel )->getRequestUrl()->doRequest()->enrichData()->getBody();
+    }
+
+    public function getEngines( string $goedkeuringssleutel ) : array 
+    {
+        $recals = new Engines();
+        return $recals->setQueryArg( 'eu_type_goedkeuringssleutel', $goedkeuringssleutel )->getRequestUrl()->doRequest()->enrichData()->getBody();
     }
 
     public function formatData()

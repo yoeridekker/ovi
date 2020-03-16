@@ -22,7 +22,7 @@ class LicensedVehicles implements ApiInterface
     
     public $allowed_params = array(
         'kenteken' => [
-            'required' => true,
+            'required' => false,
             'validation' => 'isLicenseplate',
             'sanitization' => 'sanitizeLicenseplate',
             'error_message' => 'Licenseplate can\'t be empty and need to be exactly 6 alpha-numeric characters',

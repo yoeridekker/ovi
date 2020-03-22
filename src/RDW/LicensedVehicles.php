@@ -112,18 +112,21 @@ class LicensedVehicles implements ApiInterface
                     if( !empty( $recals ) ) $this->response[$index]['terugroep_acties'] = $recals;
 
                 }
-
-                if( $field === 'typegoedkeuringsnummer' && !empty( $value ) )
-                {
-                    $emissions = $this->getEmissions( $value );
-                    if( !empty( $emissions ) ) $this->response[$index]['uitstoot'] = $emissions;
-
-                    $engines = $this->getEngines( $value );
-                    if( !empty( $engines ) ) $this->response[$index]['motoren'] = $engines;
-
-                    
-                }
                 
+            }
+            if( !empty( $field['typegoedkeuringsnummer'] ) && !empty( $field['variant'] ) && !empty( $field['uitvoering'] ) ){
+                $params = [
+                    'eu_type_goedkeuringssleutel'   => (string) $field['typegoedkeuringsnummer'],
+                    'eeg_variantcode'               => (string) $field['variant'],
+                    'eeg_uitvoeringscode'           => (string) $field['uitvoering'],
+                ];
+
+                $emissions = $this->getEmissions( $params );
+                if( !empty( $emissions ) ) $this->response[$index]['uitstoot'] = $emissions;
+
+                $engines = $this->getEngines( $params );
+                if( !empty( $engines ) ) $this->response[$index]['motoren'] = $engines;
+
             }
             
         }
@@ -142,16 +145,16 @@ class LicensedVehicles implements ApiInterface
         return $recals->setQueryArg( 'kenteken', $licenseplate )->getRequestUrl()->doRequest()->enrichData()->getBody();
     }
 
-    public function getEmissions( string $goedkeuringssleutel ) : array 
+    public function getEmissions( array $params ) : array 
     {
         $recals = new Emissions();
-        return $recals->setQueryArg( 'eu_type_goedkeuringssleutel', $goedkeuringssleutel )->getRequestUrl()->doRequest()->enrichData()->getBody();
+        return $recals->setQueryArgs( $params )->getRequestUrl()->doRequest()->enrichData()->getBody();
     }
 
-    public function getEngines( string $goedkeuringssleutel ) : array 
+    public function getEngines( array $params ) : array 
     {
         $recals = new Engines();
-        return $recals->setQueryArg( 'eu_type_goedkeuringssleutel', $goedkeuringssleutel )->getRequestUrl()->doRequest()->enrichData()->getBody();
+        return $recals->setQueryArgs( $params )->getRequestUrl()->doRequest()->enrichData()->getBody();
     }
 
     public function formatData()

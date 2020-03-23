@@ -21,6 +21,12 @@ class Engines implements ApiInterface
         'eu_type_goedkeuringssleutel' => [
             'required' => true,
         ],
+        'eeg_variantcode' => [
+            'required' => true,
+        ],
+        'eeg_uitvoeringscode' => [
+            'required' => true,
+        ]
     );
 
     protected $fields = [];

@@ -9,6 +9,7 @@ use Ovi\Traits\ApiTrait;
 
 use Ovi\RDW\Faults;
 use Ovi\RDW\Recals;
+use Ovi\RDW\Transmission;
 
 class LicensedVehicles implements ApiInterface
 {
@@ -127,6 +128,9 @@ class LicensedVehicles implements ApiInterface
                 $engines = $this->getEngines( $params );
                 if( !empty( $engines ) ) $this->response[$index]['motoren'] = $engines;
 
+                $transmission = $this->getTransmission( $params );
+                if( !empty( $transmission ) ) $this->response[$index]['transmissie'] = $transmission;
+
             }
             
         }
@@ -157,6 +161,12 @@ class LicensedVehicles implements ApiInterface
         return $recals->setQueryArgs( $params )->getRequestUrl()->doRequest()->enrichData()->getBody();
     }
 
+    public function getTransmission( array $params ) : array 
+    {
+        $transmission = new Transmission();
+        return $transmission->setQueryArgs( $params )->getRequestUrl()->doRequest()->enrichData()->getBody();
+    }
+    
     public function formatData()
     {
         array_walk_recursive( $this->response, [$this,'formatDataRecursive']);

@@ -93,6 +93,36 @@ class LicensedVehicles implements ApiInterface
         foreach( $this->response as $index => $vehicle )
         {
 
+            $drivetrain = $emissions = $engines = $transmission = [];
+            if( !empty( $vehicle['typegoedkeuringsnummer'] ) && !empty( $vehicle['variant'] ) && !empty( $vehicle['uitvoering'] ) ){
+                $params = [
+                    'eu_type_goedkeuringssleutel'   => (string) $vehicle['typegoedkeuringsnummer'],
+                    'eeg_variantcode'               => (string) $vehicle['variant'],
+                    'eeg_uitvoeringscode'           => (string) $vehicle['uitvoering'],
+                ];
+
+                $emissions = $this->getEmissions( $params );
+                if( !empty( $emissions ) ) {
+                    $this->response[$index]['uitstoot'] = $emissions;
+                    $drivetrain = array_merge( $drivetrain, $emissions[0] );
+                }
+
+                $engines = $this->getEngines( $params );
+                if( !empty( $engines ) )
+                {
+                    $this->response[$index]['motoren'] = $engines;
+                    $drivetrain = array_merge( $drivetrain, $engines[0] );
+                }
+
+                $transmission = $this->getTransmission( $params );
+                if( !empty( $transmission ) )
+                {
+                    $this->response[$index]['transmissie'] = $transmission;
+                    $drivetrain = array_merge( $drivetrain, $transmission[0] );
+                }
+
+            }
+
             foreach( $vehicle as $field => $value )
             {
                 
@@ -113,27 +143,14 @@ class LicensedVehicles implements ApiInterface
                     if( !empty( $recals ) ) $this->response[$index]['terugroep_acties'] = $recals;
 
                 }
-                
-            }
-            if( !empty( $field['typegoedkeuringsnummer'] ) && !empty( $field['variant'] ) && !empty( $field['uitvoering'] ) ){
-                $params = [
-                    'eu_type_goedkeuringssleutel'   => (string) $field['typegoedkeuringsnummer'],
-                    'eeg_variantcode'               => (string) $field['variant'],
-                    'eeg_uitvoeringscode'           => (string) $field['uitvoering'],
-                ];
-
-                $emissions = $this->getEmissions( $params );
-                if( !empty( $emissions ) ) $this->response[$index]['uitstoot'] = $emissions;
-
-                $engines = $this->getEngines( $params );
-                if( !empty( $engines ) ) $this->response[$index]['motoren'] = $engines;
-
-                $transmission = $this->getTransmission( $params );
-                if( !empty( $transmission ) ) $this->response[$index]['transmissie'] = $transmission;
 
             }
-            
+
+            $this->response[$index]['aandrijving'] = $drivetrain;
+
+            $vehicle = $faults = $recals = $emissions = $engines = $transmission = $data = $key = $field = null;
         }
+
         return $this;
     }
 

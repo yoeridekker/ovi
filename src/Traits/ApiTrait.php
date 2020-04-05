@@ -155,13 +155,27 @@ trait ApiTrait
 
     public function doRequest( string $url = '', bool $silent = true ) : object 
     {
+
         $client         = new \GuzzleHttp\Client( $this->guzzle_options );
         $request_uri    = $url !== '' ? $url : $this->request_url ;
-        $request        = $client->request( 'GET', $request_uri );
-        $statusCode     = $request->getStatusCode();
 
-        Log::write("GET {$request_uri} - Statuscode {$statusCode}", __CLASS__);
-        
+        try {
+            $request = $client->request( 'GET', $request_uri );
+
+        } catch ( \GuzzleHttp\Exception\ClientException $e) {
+            $response = $e->getResponse();
+            Log::write( sprintf('GET %s - %s', $request_uri, $response->getBody()->getContents() ), __CLASS__);
+
+            if( $silent )
+            {
+                $this->response = (array) [];
+                return $this;
+            }
+            return (object) [];
+        }
+
+        $statusCode = $request->getStatusCode();
+
         if( $silent )
         {
             $this->response = (array) json_decode( $request->getBody(), true );
@@ -169,6 +183,7 @@ trait ApiTrait
         }
         
         return (object) json_decode( $request->getBody(), true );
+        
     }
 
     public function getBody( bool $single = false ) : array 

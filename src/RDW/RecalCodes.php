@@ -15,7 +15,7 @@ class RecalCodes implements ApiInterface
     use ApiTrait;
 
     private $api_base = 'https://opendata.rdw.nl';
-    private $api_path = 'resource/r8gx-ax7u.json';
+    private $api_path = 'resource/j9yg-7rg9.json';
     
     private $allowed_params = array(
         'referentiecode_rdw' => [

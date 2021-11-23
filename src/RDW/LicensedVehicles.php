@@ -100,7 +100,7 @@ class LicensedVehicles implements ApiInterface
 
             if (!empty($vehicle['typegoedkeuringsnummer']) && !empty($vehicle['variant']) && !empty($vehicle['uitvoering'])) {
                 $params = [
-                    'eu_type_goedkeuringssleutel'   => (string) $vehicle['typegoedkeuringsnummer'],
+                    // 'eu_type_goedkeuringssleutel'   => (string) $vehicle['typegoedkeuringsnummer'], // Formatting is wrong.
                     'eeg_variantcode'               => (string) $vehicle['variant'],
                     'eeg_uitvoeringscode'           => (string) $vehicle['uitvoering'],
                 ];

@@ -19,7 +19,7 @@ class ModelInformation implements ApiInterface
 
     private $allowed_params = array(
         'eu_type_goedkeuringssleutel' => [
-            'required' => true,
+            'required' => false,
         ],
         'eeg_variantcode' => [
             'required' => true,

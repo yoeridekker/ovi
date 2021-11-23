@@ -16,10 +16,10 @@ class Engines implements ApiInterface
 
     private $api_base = 'https://opendata.rdw.nl';
     private $api_path = 'resource/g2s6-ehxa.json';
-    
+
     private $allowed_params = array(
         'eu_type_goedkeuringssleutel' => [
-            'required' => true,
+            'required' => false,
         ],
         'eeg_variantcode' => [
             'required' => true,
@@ -33,9 +33,8 @@ class Engines implements ApiInterface
     public $request_url = '';
     public $query_vars = [];
 
-    public function enrichData() : object 
+    public function enrichData(): object
     {
         return $this;
     }
-
 }

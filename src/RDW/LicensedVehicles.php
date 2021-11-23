@@ -160,7 +160,7 @@ class LicensedVehicles implements ApiInterface
         }
 
         foreach ($this->response[$index] as $vehicle_index => $vehicle_data) {
-            $this->response[$index]['dataset'][$vehicle_index] = $vehicle_data;
+            $this->response[$index]['dataset'][$vehicle_index] = is_array($vehicle_data) && 1 === count($vehicle_data) ? $vehicle_data[0] : $vehicle_data;
         }
 
         $params = $emissions = $engines = $engines = $transmission = $uitvoering = $tradename = $vehicle = $field = $value = $faults = $recals = null;

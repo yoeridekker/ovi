@@ -98,34 +98,33 @@ class LicensedVehicles implements ApiInterface
         // Single result
         foreach ($this->response as $index => $vehicle) {
 
-            if (!empty($vehicle['typegoedkeuringsnummer']) && !empty($vehicle['variant']) && !empty($vehicle['uitvoering'])) {
+            if (!empty($vehicle['variant']) && !empty($vehicle['uitvoering'])) {
                 $params = [
-                    // 'eu_type_goedkeuringssleutel'   => (string) $vehicle['typegoedkeuringsnummer'], // Formatting is wrong.
                     'eeg_variantcode'               => (string) $vehicle['variant'],
                     'eeg_uitvoeringscode'           => (string) $vehicle['uitvoering'],
                 ];
 
-                $emissions = $this->get(new Emissions(), $params);
+                $emissions = $this->get(new Emissions(), $params, false);
                 if (!empty($emissions)) {
                     $this->response[$index]['uitstoot'] = $emissions;
                 }
 
-                $engines = $this->get(new Engines(), $params);
+                $engines = $this->get(new Engines(), $params, false);
                 if (!empty($engines)) {
                     $this->response[$index]['motoren'] = $engines;
                 }
 
-                $transmission = $this->get(new Transmission(), $params);
+                $transmission = $this->get(new Transmission(), $params, false);
                 if (!empty($transmission)) {
                     $this->response[$index]['transmissie'] = $transmission;
                 }
 
-                $uitvoering = $this->get(new VehicleSpecifications(), $params);
+                $uitvoering = $this->get(new VehicleSpecifications(), $params, false);
                 if (!empty($uitvoering)) {
                     $this->response[$index]['uitvoering'] = $uitvoering;
                 }
 
-                $tradename = $this->get(new ModelInformation(), $params);
+                $tradename = $this->get(new ModelInformation(), $params, false);
                 if (!empty($tradename)) {
                     $this->response[$index]['handelsnaam'] = $tradename;
                 }
@@ -159,18 +158,15 @@ class LicensedVehicles implements ApiInterface
             }
         }
 
-        foreach ($this->response[$index] as $vehicle_index => $vehicle_data) {
-            $this->response[$index]['dataset'][$vehicle_index] = is_array($vehicle_data) && 1 === count($vehicle_data) ? $vehicle_data[0] : $vehicle_data;
-        }
-
         $params = $emissions = $engines = $engines = $transmission = $uitvoering = $tradename = $vehicle = $field = $value = $faults = $recals = null;
 
         return $this;
     }
 
-    public function get($class, array $params): array
+    public function get($class, array $params, bool $multiple = true): array
     {
-        return $class->setQueryArgs($params)->getRequestUrl()->doRequest()->enrichData()->getBody();
+        $data = $class->setQueryArgs($params)->getRequestUrl()->doRequest()->enrichData()->getBody();
+        return false === $multiple && isset($data[0]) ? $data[0] : $data;
     }
 
     public function formatData()

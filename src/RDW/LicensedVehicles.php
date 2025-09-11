@@ -2,13 +2,14 @@
 
 namespace Ovi\RDW;
 
+use Ovi\Abstracts\ApiIdentifier;
 use Ovi\Interfaces\ApiInterface;
+use Ovi\RDW\Engines;
 use Ovi\Traits\SanitizationTrait;
 use Ovi\Traits\ValidationTrait;
 use Ovi\Traits\ApiTrait;
 
 use Ovi\RDW\Emissions;
-use Ovi\RDW\Engines;
 use Ovi\RDW\Transmission;
 use Ovi\RDW\VehicleSpecifications;
 use Ovi\RDW\ModelInformation;
@@ -63,14 +64,19 @@ class LicensedVehicles implements ApiInterface
     );
 
     public $request_url = '';
-    public $query_vars  = [];
+    public $query_vars = [];
     public $fields_json = '';
-    public $fields      = [];
+    public $fields = [];
+
+    public function __construct()
+    {
+
+    }
 
     public function mapFields(): object
     {
-        $this->fields_json  = __DIR__ . '/data/fields.json';
-        $this->fields       = json_decode(file_get_contents($this->fields_json), true);
+        $this->fields_json = __DIR__ . '/data/fields.json';
+        $this->fields = json_decode(file_get_contents($this->fields_json), true);
         $this->mapFieldsRecursively($this->response);
         file_put_contents($this->fields_json, json_encode($this->fields, JSON_PRETTY_PRINT));
         return $this;
@@ -90,6 +96,29 @@ class LicensedVehicles implements ApiInterface
         }
     }
 
+    public function enrichDataWith($class, $keys = [])
+    {
+        if (count($this->response) !== 1) return $this;
+
+        $params = [];
+        foreach ($this->response as $index => $vehicle) {
+
+            if (count(array_filter($keys, fn($key) => empty($vehicle[$key]))) > 0) {
+                return $this;
+            }
+
+            $params = array_intersect_key($vehicle, array_flip($keys));
+
+            $request = new $class();
+            $data = $request->setQueryArgs($params)->getRequestUrl()->doRequest()->getBody();
+            if (!empty($data)) {
+                $this->response[$index][$request->getIdentifier()] = $data;
+            }
+        }
+
+        return $this;
+    }
+
     public function enrichData(): object
     {
         // Multiple results
@@ -99,42 +128,33 @@ class LicensedVehicles implements ApiInterface
         foreach ($this->response as $index => $vehicle) {
 
             if (!empty($vehicle['variant']) && !empty($vehicle['uitvoering'])) {
+
                 $params = [
-                    'eeg_variantcode'               => (string) $vehicle['variant'],
-                    'eeg_uitvoeringscode'           => (string) $vehicle['uitvoering'],
+                    'eeg_variantcode' => (string)$vehicle['variant'],
+                    'eeg_uitvoeringscode' => (string)$vehicle['uitvoering'],
                 ];
 
-                $emissions = $this->get(new Emissions(), $params, false);
-                if (!empty($emissions)) {
-                    $this->response[$index]['uitstoot'] = $emissions;
-                }
+                $endpoints = [
+                    'uitstoot' => new Emissions(),
+                    'motoren' => new Engines(),
+                    'transmissie' => new Transmission(),
+                    'uitvoering' => new VehicleSpecifications(),
+                    'handelsnaam' => new ModelInformation(),
+                ];
 
-                $engines = $this->get(new Engines(), $params, false);
-                if (!empty($engines)) {
-                    $this->response[$index]['motoren'] = $engines;
-                }
-
-                $transmission = $this->get(new Transmission(), $params, false);
-                if (!empty($transmission)) {
-                    $this->response[$index]['transmissie'] = $transmission;
-                }
-
-                $uitvoering = $this->get(new VehicleSpecifications(), $params, false);
-                if (!empty($uitvoering)) {
-                    $this->response[$index]['uitvoering'] = $uitvoering;
-                }
-
-                $tradename = $this->get(new ModelInformation(), $params, false);
-                if (!empty($tradename)) {
-                    $this->response[$index]['handelsnaam'] = $tradename;
+                foreach ($endpoints as $name => $endpoint) {
+                    $data = $this->get($endpoint, $params, false);
+                    if (!empty($data)) {
+                        $this->response[$index][$name] = $data;
+                    }
                 }
             }
 
             foreach ($vehicle as $field => $value) {
 
                 if (strpos($field, 'api_gekentekende_voertuigen_') !== false && isset($vehicle['kenteken'])) {
-                    $key    = str_replace('api_gekentekende_voertuigen_', '', $field);
-                    $data   = (array) $this->doRequest($value . '?kenteken=' . $vehicle['kenteken'], false);
+                    $key = str_replace('api_gekentekende_voertuigen_', '', $field);
+                    $data = (array)$this->doRequest($value . '?kenteken=' . $vehicle['kenteken'], false);
 
                     if (!empty($data)) {
                         $this->response[$index][$key] = count($data) > 1 ? $data : $data[0];
@@ -180,7 +200,7 @@ class LicensedVehicles implements ApiInterface
         $sanitize = isset($this->fields[$field]['format']) && method_exists($this, $this->fields[$field]['format']) ? call_user_func([$this, $this->fields[$field]['format']], $item) : $item;
         $item = [
             'value' => $sanitize,
-            'name'  => $field,
+            'name' => $field,
             'label' => (isset($this->fields[$field]['label']) && !empty($this->fields[$field]['label']) ? $this->fields[$field]['label'] : $field)
         ];
     }

@@ -16,7 +16,7 @@ class Fuel implements ApiInterface
 
     private $api_base = 'https://opendata.rdw.nl';
     private $api_path = 'resource/8ys7-d773.json';
-    
+
     private $allowed_params = array(
         'kenteken' => [
             'required' => true,
@@ -29,8 +29,9 @@ class Fuel implements ApiInterface
     protected $fields = [];
     public $request_url = '';
     public $query_vars = [];
+    public $identifier = 'brandstof';
 
-    public function enrichData() : object 
+    public function enrichData() : object
     {
         return $this;
     }

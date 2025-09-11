@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Ovi\Helpers;
 
@@ -10,14 +10,12 @@ class Helper
 
         $keys = explode('.', $key);
 
-        while (count($keys) > 1)
-            {
-                $key = array_shift($keys);
+        while (count($keys) > 1) {
+            $key = array_shift($keys);
 
-                if ( ! isset($array[$key]) || ! is_array($array[$key]))
-                {
-                    $array[$key] = array();
-                }
+            if (!isset($array[$key]) || !is_array($array[$key])) {
+                $array[$key] = array();
+            }
 
             $array =& $array[$key];
         }
@@ -30,19 +28,23 @@ class Helper
     public static function get($array, $key, $default = null)
     {
         if (is_null($key)) return $array;
-        
+
         if (isset($array[$key])) return $array[$key];
-        
-        foreach (explode('.', $key) as $segment)
-        {
-            if ( ! is_array($array) || ! array_key_exists($segment, $array))
-            {
+
+        foreach (explode('.', $key) as $segment) {
+            if (!is_array($array) || !array_key_exists($segment, $array)) {
                 return value($default);
             }
             $array = $array[$segment];
         }
-        
+
         return $array;
     }
 
+    function pluck($array, $key)
+    {
+        return array_map(function ($v) use ($key) {
+            return is_object($v) ? $v->$key : $v[$key];
+        }, $array);
+    }
 }

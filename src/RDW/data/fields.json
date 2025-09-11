@@ -414,5 +414,149 @@
     "nominaal_continu_maximumvermogen": {
         "label": "",
         "format": ""
+    },
+    "datum_eerste_tenaamstelling_in_nederland": {
+        "label": "",
+        "format": ""
+    },
+    "jaar_laatste_registratie_tellerstand": {
+        "label": "",
+        "format": ""
+    },
+    "tellerstandoordeel": {
+        "label": "",
+        "format": ""
+    },
+    "code_toelichting_tellerstandoordeel": {
+        "label": "",
+        "format": ""
+    },
+    "tenaamstellen_mogelijk": {
+        "label": "",
+        "format": ""
+    },
+    "vervaldatum_apk_dt": {
+        "label": "",
+        "format": ""
+    },
+    "datum_tenaamstelling_dt": {
+        "label": "",
+        "format": ""
+    },
+    "datum_eerste_toelating_dt": {
+        "label": "",
+        "format": ""
+    },
+    "datum_eerste_tenaamstelling_in_nederland_dt": {
+        "label": "",
+        "format": ""
+    },
+    "zuinigheidsclassificatie": {
+        "label": "",
+        "format": ""
+    },
+    "meld_datum_door_keuringsinstantie_dt": {
+        "label": "",
+        "format": ""
+    },
+    "ingangsdatum_gebrek_dt": {
+        "label": "",
+        "format": ""
+    },
+    "publicatiedatum_rdw": {
+        "label": "",
+        "format": ""
+    },
+    "datum_aankondiging_producent": {
+        "label": "",
+        "format": ""
+    },
+    "datum_melding_bij_rdw": {
+        "label": "",
+        "format": ""
+    },
+    "datum_informeren_eigenaar": {
+        "label": "",
+        "format": ""
+    },
+    "datum_eigenaren_ge_nformeerd": {
+        "label": "",
+        "format": ""
+    },
+    "publicatiedatum_rdw_dt": {
+        "label": "",
+        "format": ""
+    },
+    "datum_aankondiging_producent_dt": {
+        "label": "",
+        "format": ""
+    },
+    "datum_melding_bij_rdw_dt": {
+        "label": "",
+        "format": ""
+    },
+    "datum_informeren_eigenaar_dt": {
+        "label": "",
+        "format": ""
+    },
+    "datum_eigenaren_ge_nformeerd_dt": {
+        "label": "",
+        "format": ""
+    },
+    "api_terugroep_actie_status": {
+        "label": "",
+        "format": ""
+    },
+    "api_terugroep_actie_risico": {
+        "label": "",
+        "format": ""
+    },
+    "api_terugroep_voertuig_merk_type": {
+        "label": "",
+        "format": ""
+    },
+    "api_terugroep_infomeren_eigenaar": {
+        "label": "",
+        "format": ""
+    },
+    "uitlaatemissieniveau": {
+        "label": "",
+        "format": ""
+    },
+    "oplegger_geremd": {
+        "label": "",
+        "format": ""
+    },
+    "vervaldatum_tachograaf": {
+        "label": "",
+        "format": ""
+    },
+    "vervaldatum_tachograaf_dt": {
+        "label": "",
+        "format": ""
+    },
+    "aangedreven_as": {
+        "label": "",
+        "format": ""
+    },
+    "hefas": {
+        "label": "",
+        "format": ""
+    },
+    "weggedrag_code": {
+        "label": "",
+        "format": ""
+    },
+    "milieuklasse_eg_goedkeuring_zwaar": {
+        "label": "",
+        "format": ""
+    },
+    "roetuitstoot": {
+        "label": "",
+        "format": ""
+    },
+    "co2_emissieklasse": {
+        "label": "",
+        "format": ""
     }
 }

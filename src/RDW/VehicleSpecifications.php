@@ -7,6 +7,11 @@ use Ovi\Traits\SanitizationTrait;
 use Ovi\Traits\ValidationTrait;
 use Ovi\Traits\ApiTrait;
 
+/**
+ * Class VehicleSpecifications
+ *
+ * RDW endpoint for vehicle type variant and execution specifications.
+ */
 class VehicleSpecifications implements ApiInterface
 {
 
@@ -33,6 +38,10 @@ class VehicleSpecifications implements ApiInterface
     public $request_url = '';
     public $query_vars = [];
 
+    /**
+     * No-op enrichment for VehicleSpecifications endpoint.
+     * @return object
+     */
     public function enrichData(): object
     {
         return $this;

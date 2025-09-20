@@ -7,6 +7,11 @@ use Ovi\Traits\SanitizationTrait;
 use Ovi\Traits\ValidationTrait;
 use Ovi\Traits\ApiTrait;
 
+/**
+ * Class BodySpecification
+ *
+ * RDW endpoint for detailed body specifications for a given vehicle.
+ */
 class BodySpecification implements ApiInterface
 {
 
@@ -30,6 +35,10 @@ class BodySpecification implements ApiInterface
     public $request_url = '';
     public $query_vars = [];
 
+    /**
+     * No-op enrichment for BodySpecification endpoint.
+     * @return object
+     */
     public function enrichData(): object
     {
         return $this;

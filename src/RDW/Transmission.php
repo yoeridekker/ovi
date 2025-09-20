@@ -7,6 +7,11 @@ use Ovi\Traits\SanitizationTrait;
 use Ovi\Traits\ValidationTrait;
 use Ovi\Traits\ApiTrait;
 
+/**
+ * Class Transmission
+ *
+ * RDW endpoint for transmission specifications associated with vehicle type approvals.
+ */
 class Transmission implements ApiInterface
 {
 
@@ -33,6 +38,10 @@ class Transmission implements ApiInterface
     public $request_url = '';
     public $query_vars = [];
 
+    /**
+     * No-op enrichment for Transmission endpoint.
+     * @return object
+     */
     public function enrichData(): object
     {
         return $this;

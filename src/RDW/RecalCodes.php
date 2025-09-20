@@ -7,6 +7,11 @@ use Ovi\Traits\SanitizationTrait;
 use Ovi\Traits\ValidationTrait;
 use Ovi\Traits\ApiTrait;
 
+/**
+ * Class RecalCodes
+ *
+ * RDW endpoint to look up details for a given recall reference code.
+ */
 class RecalCodes implements ApiInterface
 {
 
@@ -16,7 +21,7 @@ class RecalCodes implements ApiInterface
 
     private $api_base = 'https://opendata.rdw.nl';
     private $api_path = 'resource/j9yg-7rg9.json';
-    
+
     private $allowed_params = array(
         'referentiecode_rdw' => [
             'required' => true,
@@ -28,7 +33,11 @@ class RecalCodes implements ApiInterface
     public $request_url = '';
     public $query_vars = [];
 
-    public function enrichData() : object 
+    /**
+     * No-op enrichment for RecalCodes endpoint.
+     * @return object
+     */
+    public function enrichData() : object
     {
         return $this;
     }

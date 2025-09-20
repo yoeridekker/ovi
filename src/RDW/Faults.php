@@ -9,6 +9,11 @@ use Ovi\Traits\ApiTrait;
 
 use Ovi\RDW\FaultCodes;
 
+/**
+ * Class Faults
+ *
+ * RDW endpoint for reporting technical inspection faults per license plate.
+ */
 class Faults implements ApiInterface
 {
 
@@ -18,7 +23,7 @@ class Faults implements ApiInterface
 
     private $api_base = 'https://opendata.rdw.nl';
     private $api_path = 'resource/2u8a-sfar.json';
-    
+
     private $allowed_params = array(
         'kenteken' => [
             'required' => true,
@@ -37,7 +42,11 @@ class Faults implements ApiInterface
     public $request_url = '';
     public $query_vars = [];
 
-    public function enrichData() : object 
+    /**
+     * Enrich each fault record with detailed information by resolving the fault code.
+     * @return object Returns $this for chaining.
+     */
+    public function enrichData() : object
     {
         foreach( $this->response as $index => $vehicle )
         {
@@ -51,7 +60,13 @@ class Faults implements ApiInterface
         return $this;
     }
 
-    public function getFaultCode( string $faultcode ) : array 
+    /**
+     * Fetch detailed information for a given fault code.
+     *
+     * @param string $faultcode Fault code identifier.
+     * @return array The resolved fault details.
+     */
+    public function getFaultCode( string $faultcode ) : array
     {
         $faults = new FaultCodes();
         return $faults->setQueryArg( 'gebrek_identificatie', $faultcode )->getRequestUrl()->doRequest()->getBody( true );

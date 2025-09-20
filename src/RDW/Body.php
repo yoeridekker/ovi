@@ -7,6 +7,11 @@ use Ovi\Traits\SanitizationTrait;
 use Ovi\Traits\ValidationTrait;
 use Ovi\Traits\ApiTrait;
 
+/**
+ * Class Body
+ *
+ * RDW endpoint for body (carrosserie) information for a vehicle.
+ */
 class Body implements ApiInterface
 {
 
@@ -30,6 +35,10 @@ class Body implements ApiInterface
     public $request_url = '';
     public $query_vars = [];
 
+    /**
+     * No-op enrichment for Body endpoint.
+     * @return object
+     */
     public function enrichData(): object
     {
         return $this;

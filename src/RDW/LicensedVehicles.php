@@ -16,6 +16,13 @@ use Ovi\RDW\ModelInformation;
 use Ovi\RDW\Faults;
 use Ovi\RDW\Recals;
 
+/**
+ * Class LicensedVehicles
+ *
+ * RDW primary endpoint for licensed vehicles. Supports querying, enriching with
+ * related endpoints (emissions, engines, transmission, specifications, model info,
+ * faults and recalls), mapping fields, and formatting the response structure.
+ */
 class LicensedVehicles implements ApiInterface
 {
 
@@ -67,12 +74,20 @@ class LicensedVehicles implements ApiInterface
     public $query_vars = [];
     public $fields_json = '';
     public $fields = [];
+	/**
+	 * @var array|array[]|mixed
+	 */
+	public $response;
 
-    public function __construct()
+	public function __construct()
     {
 
     }
 
+    /**
+     * Map and persist field labels and formatters by inspecting the latest response.
+     * @return object Returns $this for chaining.
+     */
     public function mapFields(): object
     {
         $this->fields_json = __DIR__ . '/data/fields.json';
@@ -82,6 +97,13 @@ class LicensedVehicles implements ApiInterface
         return $this;
     }
 
+    /**
+     * Recursively scan a nested array/object to collect encountered field names
+     * and initialize entries in $this->fields when missing.
+     *
+     * @param array|object $array Response data to scan.
+     * @return void
+     */
     public function mapFieldsRecursively($array)
     {
         foreach ($array as $index => $element) {
@@ -96,6 +118,14 @@ class LicensedVehicles implements ApiInterface
         }
     }
 
+    /**
+     * When current result is a single vehicle, call a related endpoint to enrich
+     * the response with extra data using the provided keys as query args.
+     *
+     * @param object|string $class Endpoint class name or instance to invoke.
+     * @param array $keys Keys to extract from the current vehicle to pass as query.
+     * @return object Returns $this for chaining.
+     */
     public function enrichDataWith($class, $keys = [])
     {
         if (count($this->response) !== 1) return $this;
@@ -119,6 +149,14 @@ class LicensedVehicles implements ApiInterface
         return $this;
     }
 
+    /**
+     * Enrich the current response with linked datasets when a single vehicle is found.
+     * - Adds emissions, engines, transmission, specifications, model info when possible.
+     * - Follows dynamic API links embedded in the main dataset.
+     * - Adds faults and recall actions by kenteken.
+     *
+     * @return object Returns $this for chaining.
+     */
     public function enrichData(): object
     {
         // Multiple results
@@ -183,18 +221,39 @@ class LicensedVehicles implements ApiInterface
         return $this;
     }
 
+    /**
+     * Helper to execute a request against a related endpoint.
+     *
+     * @param object $class Instance of an endpoint implementing ApiInterface.
+     * @param array $params Query parameters to pass.
+     * @param bool $multiple When false, return only the first item if present.
+     * @return array The response data.
+     */
     public function get($class, array $params, bool $multiple = true): array
     {
         $data = $class->setQueryArgs($params)->getRequestUrl()->doRequest()->enrichData()->getBody();
         return false === $multiple && isset($data[0]) ? $data[0] : $data;
     }
 
+    /**
+     * Walk the response recursively and convert each primitive into a standardized
+     * structure containing value, name and label.
+     *
+     * @return $this
+     */
     public function formatData()
     {
         array_walk_recursive($this->response, [$this, 'formatDataRecursive']);
         return $this;
     }
 
+    /**
+     * Format a single field/value into the standardized output object.
+     *
+     * @param mixed $item The value to be formatted (passed by reference).
+     * @param string|int $field Field name/key.
+     * @return void
+     */
     public function formatDataRecursive(&$item, $field)
     {
         $sanitize = isset($this->fields[$field]['format']) && method_exists($this, $this->fields[$field]['format']) ? call_user_func([$this, $this->fields[$field]['format']], $item) : $item;

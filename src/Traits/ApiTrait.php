@@ -7,6 +7,10 @@ use Ovi\Helpers\Log;
 
 trait ApiTrait
 {
+    /**
+     * HTTP response status code of the last request.
+     * @var int
+     */
     private $status_code;
 
     private $guzzle_options = array(
@@ -18,11 +22,24 @@ trait ApiTrait
         ]
     );
 
+    /**
+     * Get the endpoint identifier. Defaults to the short class name in lowercase when not set.
+     * @return string
+     */
     public function getIdentifier(): string
     {
-        return $this->identifier === '' ? strtolower((new \ReflectionClass($this))->getShortName()) : $this->identifier;
+        $name = property_exists($this, 'identifier') ? (string) $this->identifier : '';
+        return $name === '' ? strtolower((new \ReflectionClass($this))->getShortName()) : $name;
     }
 
+    /**
+     * Set an option value on this instance.
+     *
+     * @param mixed $value
+     * @param string $option Dot-notation option path.
+     * @return object
+     * @throws \Exception When option name is empty or does not exist.
+     */
     public function setOption($value, string $option): object
     {
 
@@ -46,6 +63,12 @@ trait ApiTrait
         return $this;
     }
 
+    /**
+     * Bulk set options using an associative array.
+     *
+     * @param array $params
+     * @return object
+     */
     public function setOptions(array $params): object
     {
         foreach ($params as $param => $value) {
@@ -54,6 +77,14 @@ trait ApiTrait
         return $this;
     }
 
+    /**
+     * Set a single query argument with validation and sanitization based on allowed params.
+     *
+     * @param string $param
+     * @param string $value
+     * @return object
+     * @throws \Exception When param/value invalid or param not allowed.
+     */
     public function setQueryArg(string $param, string $value): object
     {
         if (empty($param)) {
@@ -80,6 +111,12 @@ trait ApiTrait
         return $this;
     }
 
+    /**
+     * Set multiple query arguments.
+     *
+     * @param array $params
+     * @return object
+     */
     public function setQueryArgs(array $params): object
     {
         foreach ($params as $param => $value) {
@@ -88,6 +125,11 @@ trait ApiTrait
         return $this;
     }
 
+    /**
+     * Get all current query arguments.
+     *
+     * @return object
+     */
     public function getQueryArgs(): object
     {
         return (object)$this->query_vars;

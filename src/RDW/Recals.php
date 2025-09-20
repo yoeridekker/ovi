@@ -10,6 +10,11 @@ use Ovi\Traits\ApiTrait;
 use Ovi\RDW\RecalCodes;
 use Ovi\RDW\RecalStatus;
 
+/**
+ * Class Recals
+ *
+ * RDW endpoint for recall actions associated with a vehicle by license plate.
+ */
 class Recals implements ApiInterface
 {
 
@@ -19,7 +24,7 @@ class Recals implements ApiInterface
 
     private $api_base = 'https://opendata.rdw.nl';
     private $api_path = 'resource/jct3-vb8s.json';
-    
+
     private $allowed_params = array(
         'kenteken' => [
             'required' => true,
@@ -32,13 +37,13 @@ class Recals implements ApiInterface
     public $request_url = '';
     public $query_vars = [];
 
-    public function enrichData() : object 
+    public function enrichData() : object
     {
         foreach( $this->response as $index => $recal )
         {
             foreach( $recal as $field => $value )
             {
-                if( $field === 'referentiecode_rdw' && $value != '' ) 
+                if( $field === 'referentiecode_rdw' && $value != '' )
                 {
                     $this->response[$index] = array_merge(
                         $this->response[$index],
@@ -52,17 +57,17 @@ class Recals implements ApiInterface
         return $this;
     }
 
-    public function getRecalCode( string $code ) : array 
+    public function getRecalCode( string $code ) : array
     {
         $codes = new RecalCodes();
         return $codes->setQueryArg( 'referentiecode_rdw', $code )->getRequestUrl()->doRequest()->getBody( true );
     }
 
-    public function getRecalStatus( string $kenteken, string $code ) : array 
+    public function getRecalStatus( string $kenteken, string $code ) : array
     {
         $status = new RecalStatus();
         return $status->setQueryArgs( ['kenteken' => $kenteken, 'referentiecode_rdw' => $code ] )->getRequestUrl()->doRequest()->getBody( true );
     }
-    
+
 
 }

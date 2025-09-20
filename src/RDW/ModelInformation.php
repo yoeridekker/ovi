@@ -7,6 +7,11 @@ use Ovi\Traits\SanitizationTrait;
 use Ovi\Traits\ValidationTrait;
 use Ovi\Traits\ApiTrait;
 
+/**
+ * Class ModelInformation
+ *
+ * RDW endpoint for model and tradename related information.
+ */
 class ModelInformation implements ApiInterface
 {
 
@@ -33,6 +38,10 @@ class ModelInformation implements ApiInterface
     public $request_url = '';
     public $query_vars = [];
 
+    /**
+     * No-op enrichment for ModelInformation endpoint.
+     * @return object
+     */
     public function enrichData(): object
     {
         return $this;

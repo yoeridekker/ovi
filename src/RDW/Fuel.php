@@ -7,6 +7,11 @@ use Ovi\Traits\SanitizationTrait;
 use Ovi\Traits\ValidationTrait;
 use Ovi\Traits\ApiTrait;
 
+/**
+ * Class Fuel
+ *
+ * RDW endpoint for fuel information associated with a vehicle.
+ */
 class Fuel implements ApiInterface
 {
 
@@ -31,6 +36,10 @@ class Fuel implements ApiInterface
     public $query_vars = [];
     public $identifier = 'brandstof';
 
+    /**
+     * No-op enrichment for Fuel endpoint.
+     * @return object
+     */
     public function enrichData() : object
     {
         return $this;

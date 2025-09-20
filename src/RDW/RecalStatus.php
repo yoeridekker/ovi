@@ -7,6 +7,11 @@ use Ovi\Traits\SanitizationTrait;
 use Ovi\Traits\ValidationTrait;
 use Ovi\Traits\ApiTrait;
 
+/**
+ * Class RecalStatus
+ *
+ * RDW endpoint for recall status of a specific license plate and reference code.
+ */
 class RecalStatus implements ApiInterface
 {
 
@@ -16,7 +21,7 @@ class RecalStatus implements ApiInterface
 
     private $api_base = 'https://opendata.rdw.nl';
     private $api_path = 'resource/t49b-isb7.json';
-    
+
     private $allowed_params = array(
         'kenteken' => [
             'required' => true,
@@ -34,7 +39,11 @@ class RecalStatus implements ApiInterface
     public $request_url = '';
     public $query_vars = [];
 
-    public function enrichData() : object 
+    /**
+     * No-op enrichment for RecalStatus endpoint.
+     * @return object
+     */
+    public function enrichData() : object
     {
         return $this;
     }

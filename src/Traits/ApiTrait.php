@@ -167,6 +167,7 @@ trait ApiTrait
             return call_user_func($sanitization, $value);
         }
 
+		return $value;
     }
 
     public function validateRequest(): object

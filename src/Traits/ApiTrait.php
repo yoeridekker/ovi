@@ -95,10 +95,6 @@ trait ApiTrait
             throw new \Exception("value is required");
         }
 
-        if (!in_array($param, array_keys($this->allowed_params))) {
-            throw new \Exception("{$param} is an invalid parameter");
-        }
-
         if (isset($this->allowed_params[$param]['sanitization'])) {
             $value = $this->sanitizeVar($this->allowed_params[$param]['sanitization'], $value);
         }

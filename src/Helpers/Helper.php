@@ -69,7 +69,7 @@ class Helper
      * @param string $key Field/property name to pluck.
      * @return array List of plucked values.
      */
-    function pluck($array, $key)
+    public static function pluck($array, $key)
     {
         return array_map(function ($v) use ($key) {
             return is_object($v) ? $v->$key : $v[$key];

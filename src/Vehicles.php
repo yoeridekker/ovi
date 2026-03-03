@@ -3,19 +3,19 @@
 namespace Ovi;
 
 use Ovi\Interfaces\VehiclesInterface;
-use Ovi\RDW\LicensedVehicles;
+use Ovi\RDW\GekentekendVoertuigen;
 
 /**
  * Class Vehicles
  *
- * Facade for interacting with RDW LicensedVehicles endpoint. Provides a simple API
+ * Facade for interacting with RDW GekentekendVoertuigen endpoint. Provides a simple API
  * to set options and retrieve formatted or raw RDW data.
  */
 class Vehicles implements VehiclesInterface
 {
     /**
-     * Underlying RDW LicensedVehicles instance.
-     * @var LicensedVehicles
+     * Underlying RDW GekentekendVoertuigen instance.
+     * @var GekentekendVoertuigen
      */
     public $instance;
 
@@ -24,7 +24,7 @@ class Vehicles implements VehiclesInterface
      */
     public function __construct()
     {
-        $this->instance = new LicensedVehicles();
+        $this->instance = new GekentekendVoertuigen();
     }
 
     /**

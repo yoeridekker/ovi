@@ -2,7 +2,7 @@
 
 namespace Ovi\Tests\RDW;
 
-use Ovi\RDW\LicensedVehicles;
+use Ovi\RDW\GekentekendVoertuigen;
 use PHPUnit\Framework\TestCase;
 
 // Named stub for enrichDataWith flow
@@ -11,6 +11,7 @@ class DummyEndpointForEnrich
     public function setQueryArgs(array $params) { return $this; }
     public function getRequestUrl() { return $this; }
     public function doRequest() { return $this; }
+    public function enrichData() { return $this; }
     public function getBody() { return [['foo' => 'bar']]; }
     public function getIdentifier(): string { return 'dummyendpoint'; }
 }
@@ -25,11 +26,11 @@ class DummyEndpointForGet
     public function getBody() { return [ ['id' => 1], ['id' => 2] ]; }
 }
 
-class LicensedVehiclesTest extends TestCase
+class GekentekendVoertuigenTest extends TestCase
 {
     public function testMapFieldsRecursivelyAddsMissingKeys()
     {
-        $lv = new LicensedVehicles();
+        $lv = new GekentekendVoertuigen();
         // Start with empty fields registry
         $lv->fields = [];
         // Simulate a nested response structure
@@ -59,7 +60,7 @@ class LicensedVehiclesTest extends TestCase
 
     public function testFormatDataUsesLabelsAndFormatters()
     {
-        $lv = new LicensedVehicles();
+        $lv = new GekentekendVoertuigen();
         // Prepare fields meta to control label and format
         $lv->fields = [
             'kenteken' => ['label' => 'Kenteken', 'format' => 'sanitizeString'],
@@ -99,7 +100,7 @@ class LicensedVehiclesTest extends TestCase
 
     public function testEnrichDataWithAddsDataWhenSingleVehicleAndKeysPresent()
     {
-        $lv = new LicensedVehicles();
+        $lv = new GekentekendVoertuigen();
         $lv->response = [
             [
                 'k1' => 'v1',
@@ -107,7 +108,7 @@ class LicensedVehiclesTest extends TestCase
             ],
         ];
 
-        // Use a named stub that LicensedVehicles can instantiate
+        // Use a named stub that GekentekendVoertuigen can instantiate
         $class = DummyEndpointForEnrich::class;
         $lv->enrichDataWith($class, ['k1', 'k2']);
 
@@ -119,7 +120,7 @@ class LicensedVehiclesTest extends TestCase
 
     public function testGetReturnsFirstItemWhenMultipleFalse()
     {
-        $lv = new LicensedVehicles();
+        $lv = new GekentekendVoertuigen();
         $endpoint = new DummyEndpointForGet();
         $result = $lv->get($endpoint, ['irrelevant' => 'x'], false);
         $this->assertSame(['id' => 1], $result);

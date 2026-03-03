@@ -31,12 +31,12 @@ interface ApiInterface
     public function setOptions(array $params): object;
 
     /**
-     * Set a single query parameter with validation and sanitization.
+     * Set a single query parameter with optional sanitization.
      * @param string $param
-     * @param string $value
+     * @param mixed $value
      * @return object
      */
-    public function setQueryArg(string $param, string $value): object;
+    public function setQueryArg(string $param, $value): object;
 
     /**
      * Set multiple query parameters.
@@ -59,27 +59,12 @@ interface ApiInterface
     public function getQueryArgs(): object;
 
     /**
-     * Validate a value using configured rules.
-     * @param string $param
-     * @param array|mixed $validation
-     * @param mixed $value
-     * @return void
-     */
-    public function validateVar($param, $validation, $value);
-
-    /**
      * Sanitize a value using configured rules.
      * @param string|callable $sanitization
      * @param mixed $value
      * @return mixed
      */
     public function sanitizeVar($sanitization, $value);
-
-    /**
-     * Validate the overall request before sending.
-     * @return object
-     */
-    public function validateRequest(): object;
 
     /**
      * Build request URL for the current query.

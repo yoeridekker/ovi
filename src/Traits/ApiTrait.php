@@ -13,14 +13,19 @@ trait ApiTrait
      */
     private $status_code;
 
-    private $guzzle_options = array(
+    /**
+     * Decoded response body from the last request.
+     * @var array
+     */
+    public $response = [];
+
+    private $guzzle_options = [
         'verify' => true,
-        'timeout' => 0,
+        'timeout' => 30,
         'headers' => [
-            //'X-App-Token' => 'test',
             'Accept' => 'application/json',
         ]
-    );
+    ];
 
     /**
      * Get the endpoint identifier. Defaults to the short class name in lowercase when not set.
@@ -78,29 +83,22 @@ trait ApiTrait
     }
 
     /**
-     * Set a single query argument with validation and sanitization based on allowed params.
+     * Set a single query argument with optional sanitization for known params.
      *
      * @param string $param
-     * @param string $value
+     * @param mixed $value
      * @return object
-     * @throws \Exception When param/value invalid or param not allowed.
      */
-    public function setQueryArg(string $param, string $value): object
+    public function setQueryArg(string $param, $value): object
     {
         if (empty($param)) {
             throw new \Exception("param is required");
         }
 
-        if (empty($value)) {
-            throw new \Exception("value is required");
-        }
+        $sanitizers = property_exists($this, 'sanitizers') ? $this->sanitizers : [];
 
-        if (isset($this->allowed_params[$param]['sanitization'])) {
-            $value = $this->sanitizeVar($this->allowed_params[$param]['sanitization'], $value);
-        }
-
-        if (isset($this->allowed_params[$param]['validation'])) {
-            $this->validateVar($param, $this->allowed_params[$param], $value);
+        if (isset($sanitizers[$param])) {
+            $value = $this->sanitizeVar($sanitizers[$param], $value);
         }
 
         $this->query_vars[$param] = $value;
@@ -136,29 +134,8 @@ trait ApiTrait
         return isset($this->query_vars[$param]) ? $this->query_vars[$param] : '';
     }
 
-    public function validateVar($param, $validation, $value)
-    {
-
-        $valid = true;
-
-        if (is_string($validation['validation']) && method_exists($this, $validation['validation'])) {
-            $valid = call_user_func([$this, $validation['validation']], $value);
-        }
-
-        if (is_callable($validation['validation'])) {
-            $valid = call_user_func($validation['validation'], $value);
-        }
-
-        if (!$valid) {
-            $exception = isset($validation['error_message']) ? $validation['error_message'] : "Validation for {$param} failed ({$validation['validation']})";
-            throw new \Exception($exception);
-        }
-
-    }
-
     public function sanitizeVar($sanitization, $value)
     {
-
         if (is_string($sanitization) && method_exists($this, $sanitization)) {
             return call_user_func([$this, $sanitization], $value);
         }
@@ -167,24 +144,11 @@ trait ApiTrait
             return call_user_func($sanitization, $value);
         }
 
-		return $value;
-    }
-
-    public function validateRequest(): object
-    {
-        //var_dump(['allowed' => $this->allowed_params, 'set' => $this->query_vars]);
-        foreach ($this->allowed_params as $field => $field_object) {
-            if (isset($field_object['required']) && $field_object['required'] && !isset($this->query_vars[$field])) {
-                var_dump($this);
-                throw new \Exception("param {$field} is required");
-            }
-        }
-        return $this;
+        return $value;
     }
 
     public function getRequestUrl(): object
     {
-        $this->validateRequest();
         $this->request_url = sprintf('%s/%s?%s', $this->api_base, $this->api_path, http_build_query($this->query_vars));
         return $this;
     }
@@ -223,6 +187,45 @@ trait ApiTrait
     public function getStatusCode(): int
     {
         return $this->status_code;
+    }
+
+    public function enrichData(): object
+    {
+        if (empty($this->response)) return $this;
+
+        foreach ($this->response as $index => $record) {
+            foreach ($record as $field => $value) {
+                if (strpos($field, 'api_') === 0 && !empty($value)) {
+                    $key = preg_replace('/^api_/', '', $field);
+                    $data = $this->fetchApiLink($value, $record);
+                    if (!empty($data)) {
+                        $this->response[$index][$key] = count($data) > 1 ? $data : $data[0];
+                    }
+                    unset($this->response[$index][$field]);
+                }
+            }
+        }
+        return $this;
+    }
+
+    private function fetchApiLink(string $url, array $record): array
+    {
+        $info = \Ovi\RDW\EndpointRegistry::resolveFromUrl($url);
+
+        if ($info) {
+            // Extract linking fields from the current record
+            $params = array_intersect_key($record, array_flip($info['link']));
+
+            // Also include any query params from the URL itself
+            $parsed = parse_url($url);
+            parse_str($parsed['query'] ?? '', $urlParams);
+            $params = array_merge($params, $urlParams);
+
+            $endpoint = new $info['class']();
+            return $endpoint->setQueryArgs($params)->getRequestUrl()->doRequest()->enrichData()->getBody();
+        }
+
+        return (array) $this->doRequest($url, false);
     }
 
     public function getBody(bool $single = false): array

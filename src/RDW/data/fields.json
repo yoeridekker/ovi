@@ -558,5 +558,93 @@
     "co2_emissieklasse": {
         "label": "",
         "format": ""
+    },
+    "gekentekende_voertuigen_assen": {
+        "label": "",
+        "format": ""
+    },
+    "afstand_tot_volgende_as_voertuig": {
+        "label": "",
+        "format": ""
+    },
+    "gekentekende_voertuigen_brandstof": {
+        "label": "",
+        "format": ""
+    },
+    "opgegeven_maximum_snelheid": {
+        "label": "",
+        "format": ""
+    },
+    "uitstoot_deeltjes_zwaar": {
+        "label": "",
+        "format": ""
+    },
+    "klasse_hybride_elektrisch_voertuig": {
+        "label": "",
+        "format": ""
+    },
+    "gekentekende_voertuigen_carrosserie": {
+        "label": "",
+        "format": ""
+    },
+    "gekentekende_voertuigen_carrosserie_specifiek": {
+        "label": "",
+        "format": ""
+    },
+    "carrosserie_voertuig_nummer_code_volgnummer": {
+        "label": "",
+        "format": ""
+    },
+    "carrosseriecode": {
+        "label": "",
+        "format": ""
+    },
+    "carrosserie_voertuig_nummer_europese_omschrijving": {
+        "label": "",
+        "format": ""
+    },
+    "gekentekende_voertuigen_voertuigklasse": {
+        "label": "",
+        "format": ""
+    },
+    "carrosserie_klasse_volgnummer": {
+        "label": "",
+        "format": ""
+    },
+    "voertuigklasse": {
+        "label": "",
+        "format": ""
+    },
+    "voertuigklasse_omschrijving": {
+        "label": "",
+        "format": ""
+    },
+    "keuringen": {
+        "label": "",
+        "format": ""
+    },
+    "vervaldatum_keuring": {
+        "label": "",
+        "format": ""
+    },
+    "vervaldatum_keuring_dt": {
+        "label": "",
+        "format": ""
+    },
+    "meldingenkeuringsinstantie": {
+        "label": "",
+        "format": ""
+    },
+    "soort_melding_ki_omschrijving": {
+        "label": "",
+        "format": ""
+    },
+    "geconstateerdegebreken": {
+        "label": "",
+        "format": ""
+    },
+    "terugroepactiestatus": {
+        "label": "",
+        "format": ""
     }
 }

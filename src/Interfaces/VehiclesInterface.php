@@ -15,7 +15,7 @@ interface VehiclesInterface
      * @param array $params
      * @return object
      */
-    public function set_options( array $params = [] ) : object ;
+    public function set_options(array $params = []): object;
 
     /**
      * Set a single option.
@@ -24,7 +24,7 @@ interface VehiclesInterface
      * @param string $option
      * @return object
      */
-    public function set_option( $value, string $option ) : object ;
+    public function set_option($value, string $option): object;
 
     /**
      * Execute formatted request.
@@ -32,5 +32,13 @@ interface VehiclesInterface
      * @param array $params
      * @return array
      */
-    public function get( array $params = [] );
+    public function get(array $params = []);
+
+    /**
+     * Execute request and return raw (unformatted) response.
+     *
+     * @param array $params
+     * @return array
+     */
+    public function get_raw(array $params = []);
 }

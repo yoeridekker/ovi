@@ -26,16 +26,49 @@ class GekentekendVoertuigen implements ApiInterface
     public $fields = [];
 
     /**
-     * Map and persist field labels and formatters by inspecting the latest response.
+     * Map field labels and formatters by inspecting the latest response.
+     *
+     * The packaged data/fields.json (curated labels + formatters) is read-only;
+     * newly discovered fields are persisted to a writable cache path so this
+     * never writes into vendor/. A failed write is non-fatal.
+     *
      * @return object Returns $this for chaining.
      */
     public function mapFields(): object
     {
-        $this->fields_json = __DIR__ . '/data/fields.json';
-        $this->fields = json_decode(file_get_contents($this->fields_json), true);
+        $this->fields_json = $this->writableFieldsPath();
+
+        $packaged = json_decode((string) file_get_contents(__DIR__ . '/data/fields.json'), true) ?: [];
+        $discovered = is_readable($this->fields_json)
+            ? (json_decode((string) file_get_contents($this->fields_json), true) ?: [])
+            : [];
+
+        $this->fields = array_replace($discovered, $packaged);
+        $before = $this->fields;
         $this->mapFieldsRecursively($this->response);
-        file_put_contents($this->fields_json, json_encode($this->fields, JSON_PRETTY_PRINT));
+
+        if ($this->fields !== $before) {
+            @file_put_contents($this->fields_json, json_encode($this->fields, JSON_PRETTY_PRINT));
+        }
+
         return $this;
+    }
+
+    /**
+     * Writable location for discovered fields: Laravel's storage/app/ovi when
+     * available, otherwise the system temp dir.
+     */
+    private function writableFieldsPath(): string
+    {
+        $dir = function_exists('storage_path')
+            ? storage_path('app/ovi')
+            : sys_get_temp_dir() . '/ovi';
+
+        if (!is_dir($dir)) {
+            @mkdir($dir, 0775, true);
+        }
+
+        return $dir . '/fields.json';
     }
 
     /**

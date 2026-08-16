@@ -117,8 +117,21 @@ class GekentekendVoertuigen implements ApiInterface
             new ToegevoegdeObjecten(),
         ];
 
-        foreach ($kentekenEndpoints as $endpoint) {
-            $data = $this->get($endpoint, ['kenteken' => $vehicle['kenteken']]);
+        $client = new \GuzzleHttp\Client($this->guzzle_options);
+        $promises = [];
+        foreach ($kentekenEndpoints as $i => $endpoint) {
+            $endpoint->setQueryArgs(['kenteken' => $vehicle['kenteken']])->getRequestUrl();
+            $promises[$i] = $client->getAsync($endpoint->getRequestUri());
+        }
+
+        $results = \GuzzleHttp\Promise\Utils::settle($promises)->wait();
+
+        foreach ($kentekenEndpoints as $i => $endpoint) {
+            $result = $results[$i] ?? null;
+            if (($result['state'] ?? '') !== 'fulfilled') continue;
+
+            $body = (array) json_decode($result['value']->getBody(), true);
+            $data = $endpoint->setResponse($body)->enrichData()->getBody();
             if (!empty($data)) {
                 $this->response[0][$endpoint->getIdentifier()] = $data;
             }

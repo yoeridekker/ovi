@@ -147,6 +147,17 @@ trait ApiTrait
         return $value;
     }
 
+    public function getRequestUri(): string
+    {
+        return $this->request_url;
+    }
+
+    public function setResponse(array $response): object
+    {
+        $this->response = $response;
+        return $this;
+    }
+
     public function getRequestUrl(): object
     {
         $this->request_url = sprintf('%s/%s?%s', $this->api_base, $this->api_path, http_build_query($this->query_vars));
@@ -189,43 +200,66 @@ trait ApiTrait
         return $this->status_code;
     }
 
+    /**
+     * Follow all api_* links in the response concurrently. Sequential fetching
+     * cost ~200-300ms per link; a single vehicle carries ~5 links and the
+     * kenteken endpoints another 8, so concurrency is the difference between
+     * ~3s and well under a second for a cold lookup.
+     */
     public function enrichData(): object
     {
         if (empty($this->response)) return $this;
 
+        $jobs = [];
         foreach ($this->response as $index => $record) {
             foreach ($record as $field => $value) {
                 if (strpos($field, 'api_') === 0 && !empty($value)) {
-                    $key = preg_replace('/^api_/', '', $field);
-                    $data = $this->fetchApiLink($value, $record);
-                    if (!empty($data)) {
-                        $this->response[$index][$key] = count($data) > 1 ? $data : $data[0];
-                    }
-                    unset($this->response[$index][$field]);
+                    $jobs[] = ['index' => $index, 'field' => $field, 'url' => $value, 'record' => $record];
                 }
             }
         }
-        return $this;
-    }
+        if (empty($jobs)) return $this;
 
-    private function fetchApiLink(string $url, array $record): array
-    {
-        $info = \Ovi\RDW\EndpointRegistry::resolveFromUrl($url);
+        $client = new \GuzzleHttp\Client($this->guzzle_options);
+        $promises = [];
+        $endpoints = [];
+        foreach ($jobs as $i => $job) {
+            $info = \Ovi\RDW\EndpointRegistry::resolveFromUrl($job['url']);
+            if ($info) {
+                $params = array_intersect_key($job['record'], array_flip($info['link']));
+                $parsed = parse_url($job['url']);
+                parse_str($parsed['query'] ?? '', $urlParams);
+                $params = array_merge($params, $urlParams);
 
-        if ($info) {
-            // Extract linking fields from the current record
-            $params = array_intersect_key($record, array_flip($info['link']));
-
-            // Also include any query params from the URL itself
-            $parsed = parse_url($url);
-            parse_str($parsed['query'] ?? '', $urlParams);
-            $params = array_merge($params, $urlParams);
-
-            $endpoint = new $info['class']();
-            return $endpoint->setQueryArgs($params)->getRequestUrl()->doRequest()->enrichData()->getBody();
+                $endpoint = (new $info['class']())->setQueryArgs($params)->getRequestUrl();
+                $endpoints[$i] = $endpoint;
+                $promises[$i] = $client->getAsync($endpoint->getRequestUri());
+            } else {
+                $endpoints[$i] = null;
+                $promises[$i] = $client->getAsync($job['url']);
+            }
         }
 
-        return (array) $this->doRequest($url, false);
+        $results = \GuzzleHttp\Promise\Utils::settle($promises)->wait();
+
+        foreach ($jobs as $i => $job) {
+            unset($this->response[$job['index']][$job['field']]);
+
+            $result = $results[$i] ?? null;
+            if (($result['state'] ?? '') !== 'fulfilled') continue;
+
+            $body = (array) json_decode($result['value']->getBody(), true);
+            $data = $endpoints[$i] !== null
+                ? $endpoints[$i]->setResponse($body)->enrichData()->getBody()
+                : $body;
+
+            if (!empty($data)) {
+                $key = preg_replace('/^api_/', '', $job['field']);
+                $this->response[$job['index']][$key] = count($data) > 1 ? $data : $data[0];
+            }
+        }
+
+        return $this;
     }
 
     public function getBody(bool $single = false): array
